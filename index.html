@@ -1,0 +1,863 @@
+ <!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirPods Studio — Premium Audio Experience</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        apple: {
+                            blue: '#0071E3',
+                            hover: '#0077ED',
+                            gray: '#F5F5F7',
+                            dark: '#1D1D1F',
+                            border: '#D2D2D7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-white text-apple-dark font-sans antialiased selection:bg-apple-blue selection:text-white">
+
+    <!-- Announcement Bar -->
+    <div class="bg-apple-dark text-white text-xs sm:text-sm py-2.5 px-4 text-center tracking-wide">
+        <span>Enjoy free express shipping on all AirPods orders. <a href="#shop" class="underline hover:text-apple-blue transition-colors ml-1 font-medium">Shop now &rarr;</a></span>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-apple-border/50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="router.navigate('home')">
+                <svg class="w-6 h-6 text-apple-dark" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.35c.64-.78 1.07-1.86.95-2.94-.92.04-2.04.62-2.7 1.4-.58.67-1.09 1.77-.95 2.84 1.03.08 2.06-.52 2.7-1.3z"/>
+                </svg>
+                <span class="font-semibold text-lg tracking-tight">AirPods Studio</span>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-600">
+                <button onclick="router.navigate('home')" class="hover:text-apple-dark transition-colors">Home</button>
+                <button onclick="router.navigate('shop')" class="hover:text-apple-dark transition-colors">All Products</button>
+                <button onclick="router.navigate('about')" class="hover:text-apple-dark transition-colors">About</button>
+                <button onclick="router.navigate('services')" class="hover:text-apple-dark transition-colors">Services</button>
+                <button onclick="router.navigate('journal')" class="hover:text-apple-dark transition-colors">Journal</button>
+                <button onclick="router.navigate('contact')" class="hover:text-apple-dark transition-colors">Contact</button>
+            </nav>
+
+            <!-- Action Icons -->
+            <div class="flex items-center space-x-5">
+                <button onclick="router.navigate('shop')" aria-label="Search" class="text-gray-600 hover:text-apple-dark transition-colors">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                <button onclick="router.navigate('wishlist')" aria-label="Wishlist" class="text-gray-600 hover:text-apple-dark transition-colors relative">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                    <span id="wishlist-badge" class="absolute -top-1.5 -right-1.5 bg-apple-blue text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold hidden">0</span>
+                </button>
+                <button onclick="toggleCart()" aria-label="Shopping Cart" class="text-gray-600 hover:text-apple-dark transition-colors relative">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-apple-blue text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+                <button onclick="router.navigate('dashboard')" aria-label="Customer Account" class="hidden sm:flex text-gray-600 hover:text-apple-dark transition-colors">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </button>
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-600 hover:text-apple-dark">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Nav Menu Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300 md:hidden flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b border-apple-border">
+            <span class="font-bold text-lg">Menu</span>
+            <button onclick="toggleMobileMenu()" class="p-2 text-gray-600 hover:text-apple-dark">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div class="flex flex-col p-6 space-y-4 text-lg font-medium">
+            <button onclick="router.navigate('home'); toggleMobileMenu();" class="text-left py-2 border-b border-gray-100">Home</button>
+            <button onclick="router.navigate('shop'); toggleMobileMenu();" class="text-left py-2 border-b border-gray-100">All Products</button>
+            <button onclick="router.navigate('about'); toggleMobileMenu();" class="text-left py-2 border-b border-gray-100">About Us</button>
+            <button onclick="router.navigate('services'); toggleMobileMenu();" class="text-left py-2 border-b border-gray-100">Services</button>
+            <button onclick="router.navigate('journal'); toggleMobileMenu();" class="text-left py-2 border-b border-gray-100">Journal</button>
+            <button onclick="router.navigate('contact'); toggleMobileMenu();" class="text-left py-2 border-b border-gray-100">Contact Us</button>
+            <button onclick="router.navigate('dashboard'); toggleMobileMenu();" class="text-left py-2 text-apple-blue flex items-center space-x-2">
+                <i data-lucide="user" class="w-5 h-5"></i> <span>My Account</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <main id="app-container">
+        <!-- Dynamically Rendered Page Content Goes Here -->
+    </main>
+
+    <!-- Shopping Cart Drawer -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden transition-opacity">
+        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300" id="cart-drawer-panel">
+            <div class="flex items-center justify-between p-6 border-b border-apple-border">
+                <h2 class="text-xl font-bold tracking-tight">Your Shopping Bag</h2>
+                <button onclick="toggleCart()" class="p-2 text-gray-500 hover:text-black rounded-full hover:bg-gray-100">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <!-- Cart Items Container -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-gray-100">
+                <!-- Dynamically populated cart items -->
+            </div>
+            <!-- Cart Summary Footer -->
+            <div class="p-6 border-t border-apple-border bg-apple-gray/50 space-y-4">
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="font-semibold text-apple-dark">$0.00</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>Shipping</span>
+                    <span class="text-green-600 font-medium">FREE</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold text-apple-dark pt-2 border-t border-gray-200">
+                    <span>Total</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+                <button onclick="router.navigate('checkout'); toggleCart();" class="w-full bg-apple-blue text-white py-3.5 rounded-xl font-semibold hover:bg-apple-hover transition-all shadow-md shadow-apple-blue/20">
+                    Proceed to Secure Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating AI Assistant Widget ("Airi") -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <button onclick="toggleAIWidget()" aria-label="Open AI Assistant" class="bg-apple-dark text-white p-4 rounded-full shadow-2xl hover:scale-105 transition-transform flex items-center justify-center relative group">
+            <i data-lucide="sparkles" class="w-6 h-6 text-apple-blue animate-pulse"></i>
+            <span class="absolute right-full mr-3 bg-white text-apple-dark text-xs px-3 py-1.5 rounded-lg shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity font-medium pointer-events-none">Ask Airi AI</span>
+        </button>
+    </div>
+
+    <!-- AI Chat Modal Window -->
+    <div id="ai-modal" class="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-apple-border flex flex-col hidden overflow-hidden">
+        <div class="bg-apple-dark text-white p-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="sparkles" class="w-5 h-5 text-apple-blue"></i>
+                <span class="font-bold">Airi — AirPods AI Expert</span>
+            </div>
+            <button onclick="toggleAIWidget()" class="text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div id="ai-chat-messages" class="p-4 h-80 overflow-y-auto space-y-3 bg-apple-gray/30 text-sm">
+            <div class="flex items-start space-x-2">
+                <div class="bg-apple-blue text-white p-2 rounded-full"><i data-lucide="bot" class="w-4 h-4"></i></div>
+                <div class="bg-white p-3 rounded-2xl shadow-sm border border-apple-border max-w-[80%]">
+                    Hello! I'm Airi, your personal AirPods specialist. Looking for help choosing between AirPods Pro 2 or AirPods Max? Ask me anything!
+                </div>
+            </div>
+        </div>
+        <div class="p-3 border-t border-apple-border bg-white flex items-center space-x-2">
+            <input type="text" id="ai-input" placeholder="Type your question..." class="flex-1 px-4 py-2 text-sm border border-apple-border rounded-xl focus:outline-none focus:ring-2 focus:ring-apple-blue">
+            <button onclick="sendAIMessage()" class="bg-apple-blue text-white p-2 rounded-xl hover:bg-apple-hover transition-colors">
+                <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Support Button -->
+    <div class="fixed bottom-6 left-6 z-40">
+        <a href="https://wa.me/15550198283?text=Hello,%20I%20need%20help%20with%20AirPods%20purchase." target="_blank" rel="noopener noreferrer" aria-label="Contact via WhatsApp" class="bg-[#25D366] text-white p-3.5 rounded-full shadow-2xl hover:scale-105 transition-transform flex items-center justify-center">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-apple-gray border-t border-apple-border text-gray-500 text-xs py-12 px-4 sm:px-6 lg:px-8 mt-20">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+            <div>
+                <h4 class="font-semibold text-apple-dark mb-3">Shop & Learn</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="router.navigate('shop')" class="hover:text-apple-dark">AirPods 4</a></li>
+                    <li><a href="#" onclick="router.navigate('shop')" class="hover:text-apple-dark">AirPods Pro 2</a></li>
+                    <li><a href="#" onclick="router.navigate('shop')" class="hover:text-apple-dark">AirPods Max</a></li>
+                    <li><a href="#" onclick="router.navigate('shop')" class="hover:text-apple-dark">Accessories</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-apple-dark mb-3">Account</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="router.navigate('dashboard')" class="hover:text-apple-dark">Manage Your Account</a></li>
+                    <li><a href="#" onclick="router.navigate('login')" class="hover:text-apple-dark">Sign In / Register</a></li>
+                    <li><a href="#" onclick="router.navigate('cart')" class="hover:text-apple-dark">View Cart</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-apple-dark mb-3">Entertainment</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="router.navigate('journal')" class="hover:text-apple-dark">Apple AirPods Journal</a></li>
+                    <li><a href="#" onclick="router.navigate('services')" class="hover:text-apple-dark">Spatial Audio Guide</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-apple-dark mb-3">Apple Store</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="router.navigate('about')" class="hover:text-apple-dark">Find a Store</a></li>
+                    <li><a href="#" onclick="router.navigate('services')" class="hover:text-apple-dark">Genius Bar & Support</a></li>
+                    <li><a href="#" onclick="router.navigate('contact')" class="hover:text-apple-dark">Contact Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-apple-dark mb-3">Admin Portal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="router.navigate('admin')" class="hover:text-apple-blue font-semibold">Admin Dashboard</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto pt-8 border-t border-apple-border flex flex-col md:flex-row items-center justify-between text-[11px]">
+            <p>Copyright &copy; 2026 AirPods Studio Inc. All rights reserved. Independent e-commerce specialist store.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" onclick="router.navigate('privacy')" class="hover:text-apple-dark">Privacy Policy</a>
+                <a href="#" onclick="router.navigate('terms')" class="hover:text-apple-dark">Terms of Use</a>
+                <a href="#" onclick="router.navigate('shipping')" class="hover:text-apple-dark">Sales Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT APP LOGIC & STATE -->
+    <script>
+        // --- DATA STORE & CATALOG ---
+        const products = [
+            {
+                id: 'airpods-pro-2',
+                name: 'AirPods Pro 2',
+                tagline: 'Active Noise Cancellation & Adaptive Audio',
+                price: 249.00,
+                rating: 4.9,
+                reviews: 2840,
+                category: 'In-Ear',
+                badge: 'Best Seller',
+                image: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&q=80&w=800',
+                description: 'AirPods Pro 2 feature up to 2x more Active Noise Cancellation, Transparency mode, and now Personalized Spatial Audio with dynamic head tracking for immersive sound.',
+                specs: { chip: 'Apple H2 headphone chip', battery: 'Up to 6 hours listening time with ANC on', charging: 'MagSafe Case (USB-C) with speaker and lanyard loop', resistance: 'IP54 dust, sweat, and water resistant' }
+            },
+            {
+                id: 'airpods-max',
+                name: 'AirPods Max',
+                tagline: 'High-fidelity acoustic design in over-ear style',
+                price: 549.00,
+                rating: 4.8,
+                reviews: 1420,
+                category: 'Over-Ear',
+                badge: 'New Edition',
+                image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&q=80&w=800',
+                description: 'The ultimate over-ear headphone. From the canopy to the cushions, AirPods Max are designed for an uncompromising fit that creates the optimal acoustic seal.',
+                specs: { chip: 'Apple H1 chip (each ear cup)', battery: 'Up to 20 hours of listening time on a single charge', audio: 'Custom dynamic driver, Active Noise Cancellation', weight: '384.8 grams' }
+            },
+            {
+                id: 'airpods-4-anc',
+                name: 'AirPods 4 with ANC',
+                tagline: 'Evolved comfort and Active Noise Cancellation',
+                price: 179.00,
+                rating: 4.7,
+                reviews: 950,
+                category: 'In-Ear',
+                badge: 'Popular',
+                image: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?auto=format&fit=crop&q=80&w=800',
+                description: 'AirPods 4 have been redesigned for exceptional all-day comfort and greater stability. Featuring upgraded H2 chip and Active Noise Cancellation.',
+                specs: { chip: 'Apple H2 Chip', audio: 'Active Noise Cancellation, Adaptive Audio, Transparency mode', charging: 'Redesigned wireless charging case with speaker for Find My' }
+            },
+            {
+                id: 'airpods-4',
+                name: 'AirPods 4',
+                tagline: 'Streamlined fit with legendary Apple sound',
+                price: 129.00,
+                rating: 4.6,
+                reviews: 610,
+                category: 'In-Ear',
+                badge: 'Essential',
+                image: 'https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?auto=format&fit=crop&q=80&w=800',
+                description: 'Supercharged by the H2 chip, AirPods 4 deliver richer audio quality and intuitive controls for hands-free convenience.',
+                specs: { chip: 'Apple H2 Chip', battery: 'Up to 30 hours total listening time with case', connectivity: 'Bluetooth 5.3 wireless technology' }
+            }
+        ];
+
+        let cart = JSON.parse(localStorage.getItem('airpods_cart')) || [];
+        let wishlist = JSON.parse(localStorage.getItem('airpods_wishlist')) || [];
+        let currentProductId = 'airpods-pro-2';
+
+        // --- ROUTING ENGINE ---
+        const router = {
+            navigate: function(pageId, param) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (param) currentProductId = param;
+                renderPage(pageId);
+                // Update active states
+                lucide.createIcons();
+            }
+        };
+
+        // --- CART & WISHLIST CONTROLLERS ---
+        function addToCart(productId, qty = 1) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += qty;
+            } else {
+                cart.push({ ...product, quantity: qty });
+            }
+            saveCart();
+            updateBadges();
+            showToast(`Added ${product.name} to your bag.`);
+        }
+
+        function updateCartQty(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            saveCart();
+            updateBadges();
+            renderCartItems();
+        }
+
+        function saveCart() {
+            localStorage.setItem('airpods_cart', JSON.stringify(cart));
+        }
+
+        function toggleWishlist(productId) {
+            const index = wishlist.indexOf(productId);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                showToast('Removed from wishlist.');
+            } else {
+                wishlist.push(productId);
+                showToast('Added to your wishlist.');
+            }
+            localStorage.setItem('airpods_wishlist', JSON.stringify(wishlist));
+            updateBadges();
+        }
+
+        function updateBadges() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-badge').innerText = totalCount;
+            const wishlistBadge = document.getElementById('wishlist-badge');
+            if (wishlist.length > 0) {
+                wishlistBadge.innerText = wishlist.length;
+                wishlistBadge.classList.remove('hidden');
+            } else {
+                wishlistBadge.classList.add('hidden');
+            }
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const panel = document.getElementById('cart-drawer-panel');
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => panel.classList.remove('translate-x-full'), 10);
+                renderCartItems();
+            } else {
+                panel.classList.add('translate-x-full');
+                setTimeout(() => drawer.classList.add('hidden'), 300);
+            }
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const totalEl = document.getElementById('cart-total');
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 space-y-4">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 text-gray-300 mx-auto"></i>
+                        <p class="text-gray-500 font-medium">Your bag is empty.</p>
+                        <button onclick="toggleCart(); router.navigate('shop');" class="bg-apple-dark text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-black">Start Shopping</button>
+                    </div>
+                `;
+                subtotalEl.innerText = '$0.00';
+                totalEl.innerText = '$0.00';
+                lucide.createIcons();
+                return;
+            }
+
+            let subtotal = 0;
+            container.innerHTML = cart.map(item => {
+                subtotal += item.price * item.quantity;
+                return `
+                    <div class="flex items-center space-x-4 py-4">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-xl bg-apple-gray">
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-apple-dark">${item.name}</h4>
+                            <p class="text-sm text-gray-500">$${item.price.toFixed(2)}</p>
+                            <div class="flex items-center space-x-3 mt-2">
+                                <button onclick="updateCartQty('${item.id}', -1)" class="w-7 h-7 rounded-lg border border-apple-border flex items-center justify-center text-gray-600 hover:bg-gray-100">-</button>
+                                <span class="text-sm font-medium">${item.quantity}</span>
+                                <button onclick="updateCartQty('${item.id}', 1)" class="w-7 h-7 rounded-lg border border-apple-border flex items-center justify-center text-gray-600 hover:bg-gray-100">+</button>
+                            </div>
+                        </div>
+                        <button onclick="updateCartQty('${item.id}', -${item.quantity})" class="text-gray-400 hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                `;
+            }).join('');
+
+            subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+            totalEl.innerText = `$${subtotal.toFixed(2)}`;
+            lucide.createIcons();
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-20 right-6 z-50 bg-apple-dark text-white text-sm py-3 px-6 rounded-2xl shadow-2xl flex items-center space-x-3 transition-all animate-bounce';
+            toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i><span>${message}</span>`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- PAGE RENDERING ENGINE ---
+        function renderPage(pageId) {
+            const container = document.getElementById('app-container');
+            
+            switch(pageId) {
+                case 'home':
+                    container.innerHTML = `
+                        <!-- Cinematic Hero Section -->
+                        <section class="relative bg-apple-dark text-white py-28 px-4 overflow-hidden text-center">
+                            <div class="max-w-4xl mx-auto space-y-6 relative z-10">
+                                <span class="text-apple-blue font-semibold tracking-wider uppercase text-sm">New Generation Audio</span>
+                                <h1 class="text-5xl sm:text-7xl font-bold tracking-tight">Sound That Moves You.</h1>
+                                <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto font-light">Discover immersive sound, effortless Apple connectivity, and everyday acoustic comfort.</p>
+                                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                                    <button onclick="router.navigate('shop')" class="w-full sm:w-auto bg-apple-blue text-white px-8 py-4 rounded-full font-semibold hover:bg-apple-hover transition-all shadow-lg shadow-apple-blue/30">Shop AirPods</button>
+                                    <button onclick="router.navigate('product-detail', 'airpods-pro-2')" class="w-full sm:w-auto bg-white/10 text-white border border-white/20 px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition-all backdrop-blur-md">Explore Pro 2</button>
+                                </div>
+                            </div>
+                            <div class="mt-16 max-w-5xl mx-auto">
+                                <img src="https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&q=80&w=1200" alt="AirPods Pro" class="rounded-3xl shadow-2xl mx-auto border border-white/10 hover:scale-[1.01] transition-transform duration-500">
+                            </div>
+                        </section>
+
+                        <!-- Featured Collection Section -->
+                        <section class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                                <div>
+                                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Explore the Lineup.</h2>
+                                    <p class="text-gray-500 mt-2 text-sm sm:text-base">Find the AirPods model that fits your listening style.</p>
+                                </div>
+                                <button onclick="router.navigate('shop')" class="mt-4 md:mt-0 text-apple-blue font-semibold flex items-center space-x-1 hover:underline"><span>View all models</span> <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                                ${products.map(p => `
+                                    <div class="bg-apple-gray rounded-3xl p-6 flex flex-col justify-between group hover:shadow-xl transition-all border border-apple-border/50">
+                                        <div>
+                                            <span class="text-xs font-semibold px-3 py-1 bg-white text-apple-dark rounded-full shadow-sm">${p.badge}</span>
+                                            <div class="my-6 overflow-hidden rounded-2xl">
+                                                <img src="${p.image}" alt="${p.name}" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+                                            </div>
+                                            <h3 class="font-bold text-xl text-apple-dark">${p.name}</h3>
+                                            <p class="text-sm text-gray-500 mt-1">${p.tagline}</p>
+                                        </div>
+                                        <div class="mt-6 pt-4 border-t border-apple-border/50 flex items-center justify-between">
+                                            <span class="font-bold text-lg">$${p.price.toFixed(2)}</span>
+                                            <div class="flex space-x-2">
+                                                <button onclick="router.navigate('product-detail', '${p.id}')" aria-label="View product details" class="p-2 bg-white rounded-full text-gray-600 hover:text-apple-dark shadow-sm hover:scale-105 transition-transform"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                                <button onclick="addToCart('${p.id}')" aria-label="Add product to cart" class="p-2 bg-apple-blue text-white rounded-full hover:bg-apple-hover shadow-sm hover:scale-105 transition-transform"><i data-lucide="shopping-bag" class="w-4 h-4"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </section>
+
+                        <!-- Technology Feature Banner -->
+                        <section class="bg-apple-gray py-24 px-4 my-16">
+                            <div class="max-w-5xl mx-auto text-center space-y-6">
+                                <span class="text-apple-blue font-semibold uppercase text-xs tracking-widest">Apple H2 Silicon</span>
+                                <h2 class="text-4xl sm:text-5xl font-bold tracking-tight">Intelligence inside. Acoustic perfection outside.</h2>
+                                <p class="text-gray-600 max-w-2xl mx-auto">The custom-engineered H2 chip works with computational audio algorithms to deliver smarter noise cancellation, superior three-dimensional sound, and incredible battery life efficiency.</p>
+                                <div class="pt-6">
+                                    <button onclick="router.navigate('services')" class="bg-apple-dark text-white px-8 py-3.5 rounded-full font-semibold hover:bg-black transition-colors">Explore Audio Tech</button>
+                                </div>
+                            </div>
+                        </section>
+                    `;
+                    break;
+
+                case 'shop':
+                    container.innerHTML = `
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                            <div class="mb-8">
+                                <h1 class="text-3xl sm:text-4xl font-bold">All AirPods & Accessories</h1>
+                                <p class="text-gray-500 mt-2">Explore authorized Apple AirPods models with verified engineering specs.</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                                ${products.map(p => `
+                                    <div class="bg-apple-gray rounded-3xl p-6 flex flex-col justify-between group hover:shadow-xl transition-all border border-apple-border/50">
+                                        <div>
+                                            <span class="text-xs font-semibold px-3 py-1 bg-white text-apple-dark rounded-full shadow-sm">${p.badge}</span>
+                                            <div class="my-6 overflow-hidden rounded-2xl cursor-pointer" onclick="router.navigate('product-detail', '${p.id}')">
+                                                <img src="${p.image}" alt="${p.name}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500">
+                                            </div>
+                                            <h3 class="font-bold text-xl text-apple-dark cursor-pointer" onclick="router.navigate('product-detail', '${p.id}')">${p.name}</h3>
+                                            <p class="text-sm text-gray-500 mt-1">${p.tagline}</p>
+                                            <div class="flex items-center space-x-1 mt-3 text-amber-500 text-xs font-semibold">
+                                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                                <span>${p.rating} (${p.reviews} reviews)</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-6 pt-4 border-t border-apple-border/50 flex items-center justify-between">
+                                            <span class="font-bold text-xl">$${p.price.toFixed(2)}</span>
+                                            <div class="flex space-x-2">
+                                                <button onclick="toggleWishlist('${p.id}')" aria-label="Toggle wishlist" class="p-2.5 bg-white rounded-full text-gray-600 hover:text-red-500 shadow-sm"><i data-lucide="heart" class="w-4 h-4"></i></button>
+                                                <button onclick="addToCart('${p.id}')" aria-label="Add to cart" class="px-5 py-2.5 bg-apple-blue text-white rounded-full font-semibold hover:bg-apple-hover shadow-sm text-sm">Add to Bag</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'product-detail':
+                    const product = products.find(p => p.id === currentProductId) || products[0];
+                    container.innerHTML = `
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                                <!-- Product Image Gallery -->
+                                <div class="space-y-4">
+                                    <div class="bg-apple-gray rounded-3xl overflow-hidden border border-apple-border">
+                                        <img src="${product.image}" alt="${product.name}" class="w-full h-[450px] sm:h-[550px] object-cover">
+                                    </div>
+                                </div>
+                                <!-- Product Details Info -->
+                                <div class="space-y-6">
+                                    <span class="text-xs font-semibold px-3 py-1 bg-apple-gray text-apple-dark rounded-full border border-apple-border">${product.badge}</span>
+                                    <h1 class="text-4xl font-bold tracking-tight">${product.name}</h1>
+                                    <p class="text-lg text-gray-500">${product.tagline}</p>
+                                    <div class="text-3xl font-bold text-apple-dark">$${product.price.toFixed(2)}</div>
+                                    <p class="text-gray-600 leading-relaxed">${product.description}</p>
+                                    
+                                    <div class="border-t border-b border-apple-border py-6 space-y-3">
+                                        <h3 class="font-semibold text-sm uppercase tracking-wider text-gray-500">Technical Specifications</h3>
+                                        <ul class="space-y-2 text-sm">
+                                            ${Object.entries(product.specs).map(([key, val]) => `
+                                                <li class="flex items-center space-x-2"><i data-lucide="check" class="w-4 h-4 text-apple-blue"></i><span class="font-medium capitalize">${key}:</span> <span class="text-gray-600">${val}</span></li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+
+                                    <div class="flex items-center space-x-4 pt-4">
+                                        <button onclick="addToCart('${product.id}')" class="flex-1 bg-apple-blue text-white py-4 rounded-2xl font-semibold hover:bg-apple-hover shadow-lg shadow-apple-blue/20 transition-all text-center">Add to Bag</button>
+                                        <button onclick="toggleWishlist('${product.id}')" class="p-4 border border-apple-border rounded-2xl hover:bg-gray-50 text-gray-700"><i data-lucide="heart" class="w-6 h-6"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'cart':
+                    // Render standalone cart view
+                    container.innerHTML = `
+                        <div class="max-w-4xl mx-auto px-4 py-16">
+                            <h1 class="text-3xl font-bold mb-8">Shopping Bag</h1>
+                            <div id="standalone-cart" class="space-y-6">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    `;
+                    renderCartItems();
+                    break;
+
+                case 'checkout':
+                    container.innerHTML = `
+                        <div class="max-w-3xl mx-auto px-4 py-16">
+                            <h1 class="text-3xl font-bold mb-8">Secure Checkout</h1>
+                            <form onsubmit="handleCheckoutSubmit(event)" class="space-y-8 bg-apple-gray p-8 rounded-3xl border border-apple-border">
+                                <div class="space-y-4">
+                                    <h2 class="text-xl font-semibold">1. Shipping Information</h2>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <input type="text" placeholder="First Name" required class="p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                        <input type="text" placeholder="Last Name" required class="p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                    </div>
+                                    <input type="email" placeholder="Email Address" required class="w-full p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                    <input type="text" placeholder="Street Address" required class="w-full p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <input type="text" placeholder="City" required class="p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                        <input type="text" placeholder="Postal Code" required class="p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                        <input type="text" placeholder="Country" required class="p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                    </div>
+                                </div>
+                                <div class="space-y-4 pt-4 border-t border-apple-border">
+                                    <h2 class="text-xl font-semibold">2. Payment Method (Test Mode)</h2>
+                                    <div class="bg-white p-4 rounded-xl border border-apple-border flex items-center space-x-3">
+                                        <input type="radio" checked id="card" name="payment" class="text-apple-blue">
+                                        <label for="card" class="text-sm font-medium">Credit Card / Apple Pay Simulation</label>
+                                    </div>
+                                    <input type="text" placeholder="Card Number (4242 •••• •••• 4242)" required class="w-full p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <input type="text" placeholder="MM / YY" required class="p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                        <input type="text" placeholder="CVV" required class="p-3 bg-white border border-apple-border rounded-xl text-sm">
+                                    </div>
+                                </div>
+                                <button type="submit" class="w-full bg-apple-blue text-white py-4 rounded-2xl font-bold hover:bg-apple-hover shadow-lg">Complete Order</button>
+                            </form>
+                        </div>
+                    `;
+                    break;
+
+                case 'order-success':
+                    container.innerHTML = `
+                        <div class="max-w-2xl mx-auto px-4 py-24 text-center space-y-6">
+                            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto">
+                                <i data-lucide="check" class="w-10 h-10"></i>
+                            </div>
+                            <h1 class="text-4xl font-bold tracking-tight">Order Confirmed!</h1>
+                            <p class="text-gray-600">Thank you for your purchase. Your order number is <span class="font-bold text-apple-dark">#APT-84920</span>. We have sent confirmation details to your email.</p>
+                            <button onclick="router.navigate('home')" class="bg-apple-dark text-white px-8 py-3.5 rounded-full font-semibold hover:bg-black">Return to Home</button>
+                        </div>
+                    `;
+                    break;
+
+                case 'dashboard':
+                    container.innerHTML = `
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 pb-6 border-b border-apple-border">
+                                <div>
+                                    <h1 class="text-3xl font-bold">Customer Portal</h1>
+                                    <p class="text-gray-500 mt-1">Welcome back, Alex Morgan.</p>
+                                </div>
+                                <button onclick="router.navigate('home')" class="mt-4 md:mt-0 text-sm text-red-600 font-semibold hover:underline">Sign Out</button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                                <div class="bg-apple-gray p-6 rounded-3xl border border-apple-border">
+                                    <h3 class="text-sm text-gray-500 font-medium">Total Orders</h3>
+                                    <p class="text-3xl font-bold mt-2 text-apple-dark">3</p>
+                                </div>
+                                <div class="bg-apple-gray p-6 rounded-3xl border border-apple-border">
+                                    <h3 class="text-sm text-gray-500 font-medium">Active Shipments</h3>
+                                    <p class="text-3xl font-bold mt-2 text-apple-blue">1</p>
+                                </div>
+                                <div class="bg-apple-gray p-6 rounded-3xl border border-apple-border">
+                                    <h3 class="text-sm text-gray-500 font-medium">Saved Addresses</h3>
+                                    <p class="text-3xl font-bold mt-2 text-apple-dark">2</p>
+                                </div>
+                            </div>
+                            <h2 class="text-xl font-bold mb-4">Recent Order History</h2>
+                            <div class="bg-apple-gray rounded-3xl p-6 border border-apple-border space-y-4">
+                                <div class="flex items-center justify-between py-3 border-b border-apple-border">
+                                    <div>
+                                        <p class="font-bold text-apple-dark">Order #APT-84920</p>
+                                        <p class="text-xs text-gray-500">AirPods Pro 2 &bull; Delivered Oct 24, 2026</p>
+                                    </div>
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">Delivered</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'admin':
+                    container.innerHTML = `
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                            <div class="flex items-center justify-between mb-8 pb-6 border-b border-apple-border">
+                                <div>
+                                    <span class="text-xs font-semibold px-3 py-1 bg-apple-dark text-white rounded-full">Admin Security Clearance</span>
+                                    <h1 class="text-3xl font-bold mt-2">Store Control Center</h1>
+                                </div>
+                                <button onclick="router.navigate('home')" class="text-sm font-semibold text-gray-600 hover:text-black">Exit Admin</button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                                <div class="bg-apple-gray p-6 rounded-3xl border border-apple-border">
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase">Total Revenue</h3>
+                                    <p class="text-3xl font-bold mt-2 text-apple-dark">$28,490.00</p>
+                                </div>
+                                <div class="bg-apple-gray p-6 rounded-3xl border border-apple-border">
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase">Active Orders</h3>
+                                    <p class="text-3xl font-bold mt-2 text-apple-blue">14</p>
+                                </div>
+                                <div class="bg-apple-gray p-6 rounded-3xl border border-apple-border">
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase">Catalog Products</h3>
+                                    <p class="text-3xl font-bold mt-2 text-apple-dark">4 Models</p>
+                                </div>
+                                <div class="bg-apple-gray p-6 rounded-3xl border border-apple-border">
+                                    <h3 class="text-xs font-bold text-gray-400 uppercase">Customer Accounts</h3>
+                                    <p class="text-3xl font-bold mt-2 text-apple-dark">1,240</p>
+                                </div>
+                            </div>
+                            <h2 class="text-xl font-bold mb-4">Product Catalog Quick Inventory</h2>
+                            <div class="bg-apple-gray rounded-3xl p-6 border border-apple-border overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead>
+                                        <tr class="border-b border-apple-border text-gray-500">
+                                            <th class="pb-3">Model Name</th>
+                                            <th class="pb-3">Category</th>
+                                            <th class="pb-3">Price</th>
+                                            <th class="pb-3">Stock Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-apple-border">
+                                        ${products.map(p => `
+                                            <tr>
+                                                <td class="py-4 font-semibold text-apple-dark">${p.name}</td>
+                                                <td class="py-4 text-gray-500">${p.category}</td>
+                                                <td class="py-4 font-bold">$${p.price.toFixed(2)}</td>
+                                                <td class="py-4 text-green-600 font-medium">In Stock (Verified)</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'about':
+                case 'services':
+                case 'journal':
+                case 'contact':
+                case 'wishlist':
+                case 'privacy':
+                case 'terms':
+                case 'shipping':
+                case 'login':
+                    renderStaticPages(pageId);
+                    break;
+
+                default:
+                    container.innerHTML = `
+                        <div class="max-w-xl mx-auto py-32 text-center space-y-4">
+                            <h1 class="text-6xl font-bold text-apple-dark">404</h1>
+                            <p class="text-gray-500">The page you are looking for does not exist.</p>
+                            <button onclick="router.navigate('home')" class="bg-apple-dark text-white px-6 py-3 rounded-full font-semibold">Back to Home</button>
+                        </div>
+                    `;
+            }
+            lucide.createIcons();
+        }
+
+        function renderStaticPages(pageId) {
+            const container = document.getElementById('app-container');
+            const contents = {
+                about: { title: "About AirPods Studio", text: "We are an independent premium electronics platform dedicated to providing the ultimate Apple AirPods acoustic experience with uncompromised design, instant shipping, and expert customer service." },
+                services: { title: "Services & Spatial Audio Guide", text: "Enjoy free express delivery, 2-year acoustic warranty, and 24/7 expert customer service via WhatsApp or AI assistance." },
+                journal: { title: "The AirPods Journal", text: "Explore expert articles covering Active Noise Cancellation technology, the science behind Apple H2 chip computing, and spatial audio breakthroughs." },
+                contact: { title: "Contact Our Specialists", text: "Have a question regarding your order or model compatibility? Reach out anytime at support@airpods-studio.local or via WhatsApp." },
+                wishlist: { title: "Your Saved Wishlist", text: wishlist.length === 0 ? "Your wishlist is currently empty." : `You have ${wishlist.length} items saved.` },
+                privacy: { title: "Privacy Policy", text: "We protect your personal data with robust enterprise encryption and secure session handling." },
+                terms: { title: "Terms & Conditions", text: "All purchases are protected under our consumer satisfaction guarantee and standard commercial terms." },
+                shipping: { title: "Shipping & Returns Policy", text: "Free express shipping worldwide with hassle-free 30-day returns." },
+                login: { title: "Customer Sign In", text: "Access your secure portal, check order history, and track live shipments." }
+            };
+            const c = contents[pageId] || { title: "Information", text: "Details coming soon." };
+            container.innerHTML = `
+                <div class="max-w-3xl mx-auto px-4 py-20 space-y-6">
+                    <h1 class="text-4xl font-bold tracking-tight">${c.title}</h1>
+                    <p class="text-gray-600 text-lg leading-relaxed">${c.text}</p>
+                    ${pageId === 'contact' ? `
+                        <form onsubmit="event.preventDefault(); showToast('Message sent successfully!');" class="space-y-4 pt-4">
+                            <input type="text" placeholder="Your Name" required class="w-full p-3 border border-apple-border rounded-xl text-sm">
+                            <input type="email" placeholder="Your Email" required class="w-full p-3 border border-apple-border rounded-xl text-sm">
+                            <textarea placeholder="How can we help?" rows="4" required class="w-full p-3 border border-apple-border rounded-xl text-sm"></textarea>
+                            <button type="submit" class="bg-apple-blue text-white px-8 py-3 rounded-xl font-semibold">Send Message</button>
+                        </form>
+                    ` : ''}
+                    ${pageId === 'login' ? `
+                        <form onsubmit="event.preventDefault(); router.navigate('dashboard'); showToast('Successfully logged in!');" class="space-y-4 pt-4">
+                            <input type="email" placeholder="Email Address" required class="w-full p-3 border border-apple-border rounded-xl text-sm">
+                            <input type="password" placeholder="Password" required class="w-full p-3 border border-apple-border rounded-xl text-sm">
+                            <button type="submit" class="w-full bg-apple-blue text-white py-3.5 rounded-xl font-semibold">Sign In to Account</button>
+                        </form>
+                    ` : ''}
+                    <div class="pt-8">
+                        <button onclick="router.navigate('home')" class="bg-apple-gray text-apple-dark px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-gray-200">Back to Home</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+            cart = [];
+            saveCart();
+            updateBadges();
+            router.navigate('order-success');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+            } else {
+                menu.classList.add('translate-x-full');
+            }
+        }
+
+        // --- AI ASSISTANT "AIRI" LOGIC ---
+        function toggleAIWidget() {
+            const modal = document.getElementById('ai-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('ai-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const chatMessages = document.getElementById('ai-chat-messages');
+            chatMessages.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-apple-blue text-white p-3 rounded-2xl shadow-sm max-w-[80%]">${msg}</div>
+                </div>
+            `;
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Simulated AI Intelligent Response
+            setTimeout(() => {
+                let reply = "I recommend checking out AirPods Pro 2 for active noise cancellation or AirPods Max for over-ear acoustic immersion.";
+                const lower = msg.toLowerCase();
+                if (lower.includes('max')) reply = "AirPods Max offer high-fidelity audio with custom dynamic drivers and 20 hours of battery life ($549).";
+                if (lower.includes('pro')) reply = "AirPods Pro 2 feature H2 chip, 2x noise cancellation, and Adaptive Audio ($249).";
+                if (lower.includes('price') || lower.includes('cost')) reply = "Prices range from $129 for AirPods 4 up to $549 for AirPods Max.";
+
+                chatMessages.innerHTML += `
+                    <div class="flex items-start space-x-2">
+                        <div class="bg-apple-blue text-white p-2 rounded-full"><i data-lucide="bot" class="w-4 h-4"></i></div>
+                        <div class="bg-white p-3 rounded-2xl shadow-sm border border-apple-border max-w-[80%]">${reply}</div>
+                    </div>
+                `;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                lucide.createIcons();
+            }, 600);
+        }
+
+        // Initialize App on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            router.navigate('home');
+            updateBadges();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html> 
